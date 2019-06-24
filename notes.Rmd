@@ -1,0 +1,20 @@
+---
+title: "Hedge Fund Decomposition with Traditional and Alternative Investment Strategies"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+The objective of this application is two-fold: 1) give a basic introduction into traditional and alternative investments; 2) help the user get a better understanding of hedge funds.Data tab breaks down investment 
+strategies into asset classes (equities, fixed income, FX, commodities and 
+volatility) and investment styles (traditional, carry, value, momentum,
+liquidity and emerging markets). Traditional strategies are defined as 
+long-only investments (such as S&P500, US 10-year sovereign bond, etc.) and 
+alternative are defined as long/short investment strategies. Application 
+calculates historical performance of a selected strategy 
+for a data range specified by user.Similar to ingredients in a recipe, hedge funds can also be broken down into building blocks - risk factors. Portfolio Decomposition tab determines traditional and alternative investment strategies the portfolio is composed of and percentage allocations to them. Pie chart illustrates percentages of portfolio risk explained by each strategy and the remaining (idiosyncratic) component that can not be attributed to considered factors. User can specify hedge fund index and date range for analysis.
+
+Link to project page on GitHub: <https://github.com/tsyurmasto/shinyApp>.
+
+

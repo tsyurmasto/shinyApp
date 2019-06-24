@@ -11,7 +11,10 @@ shinyUI(dashboardPage(
         sidebarUserPanel("Peter Tsyurmasto","NYC Data Science Academy"),
         sidebarMenu(
             menuItem("Home", tabName = "Home", icon = icon("home")),
-            menuItem("Data", tabName = "Data", icon = icon("database")),
+            menuItem("Data", tabName = "Data",icon=icon('database'),
+                menuSubItem("Investment Strategies", tabName = "Investment_Strategies"),
+                menuSubItem("Hedge Funds", tabName = "Hedge_Funds")
+            ),
             menuItem("Portfolio Decomposition", tabName = "Portfolio_Decomposition", icon = icon("map")),
             menuItem("About Author", tabName = "About", icon = icon("bar-chart-o"))
         )
@@ -47,7 +50,7 @@ shinyUI(dashboardPage(
                     ),
             
             # Data tab ####        
-            tabItem(tabName = "Data",
+            tabItem(tabName = "Investment_Strategies",
                 fluidRow(
                     box(column(dateRangeInput(inputId = "date_range2", label = "Date Range",
                                               start = as.Date('2001/12/31'), end = as.Date('2019/09/01')),width = 2),
@@ -56,16 +59,32 @@ shinyUI(dashboardPage(
                         column(selectizeInput(inputId = "name2.2",label = "Investment Style",
                                               choices = c('Traditional','Carry','Value','Momentum','Liquidity','Emerging Markets')),width=2),
                         column(selectizeInput(inputId = "name2",label = 'Select Investment Strategy',
-                        choices = setNames(as.vector(data.X.description$id),as.vector(data.X.description$name))),width=2),
-                        #column(selectizeInput(inputId = "name2",
-                        #                      label = "Hedge Fund Indices",
-                        #                      choices = setNames(as.vector(data.Y.description$id),as.vector(data.Y.description$name))),width=2),
-                        width=12)
+                        choices = setNames(as.vector(data.X.description$id),as.vector(data.X.description$name))),width=2),width=12)
                 ),
                 
                 fluidPage(
                     plotOutput("graph2"),
                     tableOutput("table2")
+                )
+            ),
+            
+            # Hedge Funds tab ####
+            tabItem(tabName = "Hedge_Funds",
+                fluidRow(
+                    box(column(dateRangeInput(inputId = "date_range3", label = "Date Range",
+                                                  start = as.Date('2001/12/31'), end = as.Date('2019/09/01')),width = 2),
+                        column(selectizeInput(inputId = "name3.1",label = "Type",
+                                              choices = c('Liquid Alternatives','Hedge Funds')),width=2),
+                        column(selectizeInput(inputId = "name3.2",label = "Style",
+                                              choices = c('Composite Multi-Strategy','Equity Hedge','Event Driven','Global Macro','Relative Value')),width=2),
+                        column(selectizeInput(inputId = "name3",label = 'Select Hedge Fund Index',
+                                              choices = setNames(as.vector(data.Y.description$id),as.vector(data.Y.description$name))),width=2),width = 12)
+                
+                ),
+                
+                fluidPage(
+                    plotOutput("graph3"),
+                    tableOutput("table3")
                 )
             ),
                     

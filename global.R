@@ -3,6 +3,7 @@ library(zoo)
 library(glmnet)
 library(ggplot2)
 library(formattable)
+library(lubridate)
 
 get_start_dt = function(df,col){return(df[head(which(!is.na(df[col])),1),"dates"])}
 
@@ -33,14 +34,18 @@ calc_cagr = function(df,col,start_dt,end_dt){
 }
 
 calc_avg = function(df,col,start_dt,end_dt){
-  return(100*252*apply(calc_returns(df) %>% 
+  n_points = df %>% filter(.,dates>=start_dt & dates<=end_dt) %>% nrow(.)
+  points_per_year = n_points/time_length(difftime(as.Date(end_dt), as.Date(start_dt)), "years")
+  return(100*points_per_year*apply(calc_returns(df) %>% 
                            filter(.,dates>=start_dt & dates<=end_dt) %>% 
                            select(.,col), MARGIN = 2, function(x) {mean(x,na.rm=T)}))
 }
 
 
 calc_vol = function(df,col,start_dt,end_dt){
-  return(100*sqrt(252)*apply(calc_returns(df) %>% 
+  n_points = df %>% filter(.,dates>=start_dt & dates<=end_dt) %>% nrow(.)
+  points_per_year = n_points/time_length(difftime(as.Date(end_dt), as.Date(start_dt)), "years")
+  return(100*sqrt(points_per_year)*apply(calc_returns(df) %>% 
                         filter(.,dates>=start_dt & dates<=end_dt) %>% 
                           select(.,col), MARGIN = 2, function(x) {sd(x,na.rm=T)}))
 }
@@ -186,3 +191,9 @@ in_sample_wrapper = function(data.X,data.Y,col,start_dt,end_dt){
 
   return(out)
 }
+
+
+
+
+
+
