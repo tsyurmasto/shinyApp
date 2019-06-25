@@ -1,0 +1,27 @@
+asset.class,style,name,description
+FX,Value,FX Value,"long 3 most undervalued and short 3 most overvalued currencies based on OECD purchasing power parity PPP metric among G10 currencies universe USD,EUR,GBP,CHF,SEK,AUD,NZD,CAD,NOK,JPY"
+Commodities,Value,Commodities Value,long 3 most backwardated and short 3 most contangoed commodity futures
+FX,Carry,FX Carry,"long 3 currencies with highest and short 3 most lowest 3-month LIBOR ratec among G10 currencies universe USD,EUR,GBP,CHF,SEK,AUD,NZD,CAD,NOK,JPY"
+Commodities,Carry,Commodities Carry,long 3 commodities with highest carry and short 3 commodities with lowest carry
+FX,Carry,FX Carry,"long 3 currencies with highest and short 3 most lowest 3-month interest rate among Emerging Market currencies universe CNY, INR, SGD, KWN, PLN, CZK, MXN, RUB, BRL, ZAR"
+Volatility,Curve,Volatility Curve,short VIX future with the highest roll-down premium
+Equities,Momentum,Equities Momentum,"long equity futures with positive and short with negative 12-month price return amoung G10 countries: US, Canada, UK, FTSE, Germany, France, Netherland, Italy, Sweden, Japan, Australia"
+Commodities,Momentum,Commodities Momentum,long commodities with positive and short commodities with negative 12-month futures price return
+Fixed Income,Value,Fixed Income Value,long 3 most undervalued and short 3 most overvalued sovereign bond futures among G10 countries based on price divergence from moving average price
+Volatility,Carry,Volatility Carry,sell 3-month US options straddle delta hedged daily
+Equities,Liquidity,Equities Liquidity,long Russell 2000 future and short S&P500 future
+Fixed Income,Carry,Fixed Income Carry,long 3 bond futures with the highest and short 3 bond futures with the lowest 3-month carry among G10 sovereign bonds
+Fixed Income,Momentum,Fixed Income Momentum,"long bond futures with positive and short with negative 12-month price return amoung G10 countries: US, Canada, UK, FTSE, Germany, France, Italy, Japan, Australia"
+Commodities,Curve,Commodities Curve,long commodity future term spreads with the highest term premium
+Fixed Income,Curve,Fixed Income Curve,long 10 year and short 2 year US sovereing bond future
+Volatility,Traditional,Volatility Traditional,short CBOE VIX future
+Equities,Emerging Markets,Equities Emerging Markets,long MSCI EM future and short S&P500 future
+Fixed Income,Curve,Fixed Income Curve,long US 10 year and short 2 US year sovereign bond future
+Equities,Traditional,Equities Traditional,long S&P500 future
+FX,Traditional,FX Traditional,long US dollar future
+Equities,Traditional,Equities Traditional,long MSCI EM future
+Commodities,Traditional,Commodities Traditional,long Bloomberg Commodity future
+Fixed Income,Traditional,Fixed Income Traditional,long 10 year US sovereign bond future
+Equities,Carry,Equities Carry,long 3 futures with highest dividend yield and short 3 futures with the lowest dividend yield among G10 countries
+FX,Momentum,FX Momentum,long 3 currencies with highest 12-month return and short 3 currencies with lowest 12-month return among G10 currencies
+Equities,Value,Equities Value,long 3 most undervalued and short 3 most overvalued futures based on earnings per share / price - risk free rate

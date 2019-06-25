@@ -19,6 +19,17 @@ select_col_na = function(df,start_dt,end_dt){
   return(select(df,cols))
 }
 
+id2name = function(df,description){
+  temp = description %>% filter(.,id %in% as.character(df$coef.name)) %>% 
+                  select(.,name)
+  # uses this line to process var.decomposition dataframe
+  if ('unexplained variance' %in% as.character(df$coef.name)) {
+    temp = data.frame(rbind(as.matrix(temp), 'unexplained variance'))
+  }
+  df[,'coef.name'] = temp
+  return(df)
+}
+
 calc_returns = function(df){
   dates = df[2:nrow(df),]$dates
   df$dates <- NULL
@@ -80,6 +91,20 @@ calc_perf_table = function(...){
   return(df)
 }
 
+get_rf_table = function(RF.table.description){
+  df = data.frame(matrix(nrow = 4, ncol = 5))
+  rownames(df) = c('Traditional','Carry','Value','Momentum')
+  colnames(df) = c('Equities','Fixed Income','FX','Commodities','Volatility')
+  for (row.item in rownames(df)){
+    for (col.item in colnames(df)){
+      df[row.item,col.item] = as.character(RF.table.description %>% 
+                                             filter(.,style==row.item,asset.class==col.item) %>%
+                                             select(.,description) %>% .[1,1])
+    }
+  } 
+  return(df)
+}
+
 align_data = function(X,Y,col,start_dt,end_dt){
   
   data.X.Y = full_join(
@@ -99,17 +124,19 @@ align_data = function(X,Y,col,start_dt,end_dt){
   return(data.X.Y)
   
 }
+
 # input data
 data.X <- read.csv(file = "./data.X.csv",na.strings = "#N/A N/A")
 data.Y.daily <- read.csv(file = "./data.Y.daily.csv",na.strings = "#N/A N/A")
 data.Y.monthly <- read.csv(file = "./data.Y.monthly.csv",na.strings = "#N/A N/A")
 data.X.description <- read.csv(file = "./data.X.description.csv")
 data.Y.description <- read.csv(file = "./data.Y.description.csv")
+RF.table.description <- read.csv(file = "./RF.table.description.csv")
+
 # convert dates column from character to dates
 data.X$dates <- as.Date(data.X$dates,"%m/%d/%Y")
 data.Y.daily$dates <- as.Date(data.Y.daily$dates,"%m/%d/%Y")
 data.Y.monthly$dates <- as.Date(data.Y.monthly$dates,"%m/%d/%Y")
-
 #### LASSO WRAPPER
 # return - dataframe of returns of dependent variable, factors column dates
 # col - column of dependent variable
@@ -185,15 +212,12 @@ in_sample_wrapper = function(data.X,data.Y,col,start_dt,end_dt){
   agg = colSums(cov_matrix)/sum(cov_matrix)
   names(agg)[names(agg)=='residuals'] <- 'unexplained variance'
   out[["var.decomposition"]] = 
-    data.frame(factors=names(agg),prop = as.numeric(agg)) %>%
-    arrange(.,desc(prop)) %>%
-    mutate(lab.ypos = cumsum(prop) - 0.5*prop)
+    data.frame(coef.name=names(agg),coef.value = as.numeric(agg))
 
   return(out)
 }
 
+out = in_sample_wrapper(data.X,data.Y.daily,'CSLAB',as.Date("2015/12/31"),as.Date("2016/12/31"))
+df = out[['var.decomposition']]
 
-
-
-
-
+    

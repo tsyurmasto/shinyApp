@@ -105,14 +105,21 @@ shinyServer(function(input, output, session) {
             ylab(names(input$name3)) +
             ggtitle("Historical Performance")
     )
-
-    
-    
     
     output$table4 <- renderTable(
         
-        {calc_perf_table(data.Y.daily,input$name4,input$date_range4[1],input$date_range4[2])},rownames=TRUE
+        {calc_perf_table(switch_df(input$name4,data.Y.daily,data.Y.monthly), 
+                         input$name4,input$date_range4[1],input$date_range4[2])},rownames=TRUE
         
+    )
+    
+    output$table1 <- renderTable(
+        {get_rf_table(RF.table.description)},
+        striped = TRUE,
+        bordered = TRUE,
+        spacing = 'l',
+        align = 'c',
+        include.rownames=TRUE
     )
     
     output$graph4 <- renderPlot(
@@ -131,24 +138,44 @@ shinyServer(function(input, output, session) {
             ggtitle("Historical Performance")
     )
     
-    output$piechart4 <- renderPlot(
-        
-        ggplot(data = in_sample_wrapper(data.X,switch_df(input$name4,data.Y.daily,data.Y.monthly),
-                    input$name4,input$date_range4[1],input$date_range4[2])[['var.decomposition']], 
-               aes(x = "", y = prop, fill = factors)) +
-            geom_bar(width = 1, stat = "identity", color = "white") +
-            coord_polar("y", start = 0)+
-            geom_text(aes(y = lab.ypos, label = percent(prop,0)), color = "white")+
-            ggtitle("Variance Decomposition")+
-            theme_void()
-    )
+    betas <-reactive({
+        id2name(
+            in_sample_wrapper(data.X,switch_df(input$name4,data.Y.daily,data.Y.monthly),
+            input$name4,input$date_range4[1],input$date_range4[2])[['betas']],
+            data.X.description) %>%
+            mutate(.,name.value =
+                paste(as.character(coef.name),"=",as.character(percent(coef.value,0)),sep=" "))
+    })
+    
+    var.diagram <-reactive({
+        id2name(
+            in_sample_wrapper(data.X,switch_df(input$name4,data.Y.daily,data.Y.monthly),
+            input$name4,input$date_range4[1],input$date_range4[2])[['var.decomposition']],
+            data.X.description) %>%
+            mutate(.,name.value =
+                       paste(as.character(coef.name),"=",as.character(percent(coef.value,0)),sep=" "))
+    })
     
     output$barchart4 <- renderPlot(
-        ggplot() + geom_col(data = 
-    in_sample_wrapper(data.X,switch_df(input$name4,data.Y.daily,data.Y.monthly),
-                      input$name4,input$date_range4[1],input$date_range4[2])[['betas']], 
-                   aes(x = coef.name, y = coef.value),fill="grey") + coord_flip()
+        betas() %>% arrange(.,desc(abs(coef.value))) %>% 
+            ggplot(.,aes(x = coef.name, y = coef.value)) + 
+            geom_col(fill="grey",alpha=0.5) + coord_flip() + 
+        ylab('Portfolio Exposures') + xlab('Investment Strategy') + 
+            geom_text(aes(x=coef.name,y=coef.value,
+            label= name.value),position = position_stack(vjust = 0.5)) +
+            theme(axis.text.y = element_blank())
     )
     
+    output$barchart5 <- renderPlot(
+        var.diagram() %>% arrange(.,desc(abs(coef.value))) %>% 
+            ggplot(.,aes(x = coef.name, y = coef.value)) + 
+            geom_col(fill="grey",alpha=0.5) + coord_flip() + 
+            ylab('Variance Contribution (%)') + xlab('Investment Strategy') + 
+            expand_limits(y = c(-0.5,1)) +
+            geom_text(aes(x=coef.name,y=coef.value,
+                          label= name.value),position = position_stack(vjust = 0.5)) +
+            theme(axis.text.y = element_blank())
+            
+    )
 
 })
