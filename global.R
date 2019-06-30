@@ -4,6 +4,8 @@ library(glmnet)
 library(ggplot2)
 library(formattable)
 library(lubridate)
+library(rsconnect)
+
 
 get_start_dt = function(df,col){return(df[head(which(!is.na(df[col])),1),"dates"])}
 
@@ -217,7 +219,6 @@ in_sample_wrapper = function(data.X,data.Y,col,start_dt,end_dt){
   return(out)
 }
 
-out = in_sample_wrapper(data.X,data.Y.daily,'CSLAB',as.Date("2015/12/31"),as.Date("2016/12/31"))
-df = out[['var.decomposition']]
+
 
     

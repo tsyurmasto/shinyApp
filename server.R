@@ -63,17 +63,6 @@ shinyServer(function(input, output, session) {
         {calc_perf_table(switch_df(input$name3,data.Y.daily,data.Y.monthly),
                          input$name3,input$date_range3[1],input$date_range3[2])},rownames=TRUE)
     
-#    output$dateRange <- renderUI({
-#        dateRangeInput('date_range3', 'Date Range', 
-#                       start=get_start_dt(switch_df3(),input$name3), end=get_end_dt(switch_df3(),input$name3))
-#    })
-    
-    
-#    observe({
-#        updateDateRangeInput(session, 'date_range3', 'Date Range', start=get_start_dt(switch_df3(),input$name3), 
-#                             end=get_end_dt(switch_df3(),input$name3))
-#    })
-    
     strategy.style3 <- reactive({unique(as.vector(data.Y.description %>%
                                                     filter(.,type == input$name3.1) %>% .$style))})
     
@@ -160,7 +149,8 @@ shinyServer(function(input, output, session) {
         betas() %>% arrange(.,desc(abs(coef.value))) %>% 
             ggplot(.,aes(x = coef.name, y = coef.value)) + 
             geom_col(fill="grey",alpha=0.5) + coord_flip() + 
-        ylab('Portfolio Exposures') + xlab('Investment Strategy') + 
+        ylab('Portfolio Exposures') + xlab('Investment Strategy') +
+            expand_limits(y = -0.1) +
             geom_text(aes(x=coef.name,y=coef.value,
             label= name.value),position = position_stack(vjust = 0.5)) +
             theme(axis.text.y = element_blank())
